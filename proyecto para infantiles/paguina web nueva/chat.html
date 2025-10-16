@@ -1,0 +1,376 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="chat.css">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=ABeeZee:ital@0;1&display=swap');
+  body {
+    background: linear-gradient(135deg, #a5f0f8 0%, #f2f2f2 100%);
+    font-family: 'ABeeZee', 'Comic Sans MS', Arial, sans-serif;
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+  }
+  .main-container {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+  }
+  .left-panel {
+    background: #e3faff;
+    width: 340px;
+    min-width: 280px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    box-shadow: 2px 0 10px #a5f0f8;
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+  .left-panel img.logo {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    box-shadow: 0 2px 10px #a5f0f8;
+    margin-bottom: 30px;
+  }
+  .perfil-grande {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    box-shadow: 0 2px 16px #4CAF50;
+    background: #fff;
+    object-fit: cover;
+    margin-bottom: 18px;
+    border: 4px solid #a5f0f8;
+  }
+  .nombre-usuario {
+    font-size: 2rem;
+    color: #4CAF50;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: center;
+    letter-spacing: 1px;
+  }
+  .right-panel {
+    flex: 1;
+    background: #f2f2f2;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+  .contactos-lista {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 24px;
+    padding: 40px 40px 0 40px;
+    justify-content: flex-start;
+    align-items: flex-start;
+    height: 100%;
+    overflow: hidden;
+  }
+  .contacto-card {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    text-align: center;
+    width: 180px;
+    min-width: 160px;
+    padding: 18px 10px 10px 10px;
+    transition: box-shadow 0.2s, transform 0.2s;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .contacto-card:hover {
+    box-shadow: 0 4px 20px #4CAF50;
+    transform: scale(1.04);
+    background: #e3faff;
+  }
+  .contacto-card img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    margin-bottom: 8px;
+    border: 3px solid #a5f0f8;
+    background: #fff;
+    object-fit: cover;
+  }
+  .contacto-card h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #4CAF50;
+    margin-bottom: 8px;
+  }
+  .icon-buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 8px;
+  }
+  .icon-buttons button {
+    font-size: 20px;
+    background: none;
+    border: none;
+    color: #444;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    border-radius: 8px;
+    padding: 4px 10px;
+  }
+  .icon-buttons button:hover {
+    color: #007BFF;
+    background: #a5f0f8;
+  }
+  .chat-ampliado {
+    position: absolute;
+    top: 0; left: 340px;
+    width: calc(100vw - 340px);
+    height: 100vh;
+    background: #fff;
+    z-index: 10;
+    box-shadow: -2px 0 10px #a5f0f8;
+    display: flex;
+    flex-direction: column;
+    animation: fadeInChat 0.3s;
+  }
+  @keyframes fadeInChat {
+    from { opacity: 0; transform: translateY(20px);}
+    to { opacity: 1; transform: translateY(0);}
+  }
+  .chat-header {
+    display: flex;
+    align-items: center;
+    padding: 24px 32px 16px 32px;
+    border-bottom: 1px solid #a5f0f8;
+    background: #e3faff;
+  }
+  .chat-header img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    margin-right: 18px;
+    border: 3px solid #a5f0f8;
+    background: #fff;
+    object-fit: cover;
+  }
+  .chat-header .chat-nombre {
+    font-size: 1.5rem;
+    color: #4CAF50;
+    font-weight: bold;
+  }
+  .chat-mensajes {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px 32px;
+    background: #f2f2f2;
+    font-size: 16px;
+    border-radius: 0 0 15px 15px;
+  }
+  .chat-input-row {
+    display: flex;
+    gap: 8px;
+    padding: 18px 32px;
+    background: #e3faff;
+    border-top: 1px solid #a5f0f8;
+  }
+  .chat-input-row input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    background: #fff;
+  }
+  .chat-input-row button {
+    background: #25D366;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .chat-input-row button:hover {
+    background: #007BFF;
+  }
+  .btn-cerrar-chat {
+    background: #e74c3c;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 15px;
+    cursor: pointer;
+    margin: 18px 32px 0 auto;
+    transition: background 0.2s;
+    display: block;
+  }
+  .btn-cerrar-chat:hover {
+    background: #f17b0d;
+  }
+</style>
+<div class="main-container">
+  <div class="left-panel">
+    <img src="icono/logo.png" class="logo" alt="Kidoo">
+    <img id="perfilGrande" class="perfil-grande" src="" alt="Perfil">
+    
+    <div class="nombre-usuario" id="nombreUsuario"></div>
+  </div>
+  <div class="right-panel">
+    <div class="contactos-lista" id="contactos"></div>
+    <div id="chatAmpliado" style="display:none;"></div>
+  </div>
+</div>
+<script>
+let usuario = JSON.parse(localStorage.getItem('usuario')) || {};
+let contactos = JSON.parse(localStorage.getItem('contactos')) || [];
+document.getElementById('perfilGrande').src = usuario.avatar || 'icono/logo.png';
+document.getElementById('nombreUsuario').textContent = usuario.nombre || 'Kidoo';
+
+function renderContactos() {
+  const cont = document.getElementById('contactos');
+  cont.innerHTML = '';
+  contactos.forEach((c, idx) => {
+    cont.innerHTML += `
+      <div class="contacto-card" onclick="ampliarChat(${idx})">
+        <img src="${c.avatar}" alt="${c.nombre}">
+        <h3>${c.nombre}</h3>
+        <div class="icon-buttons">
+          <button onclick="event.stopPropagation();abrirVideollamada('${c.nombre}', '${c.avatar}')"><i class="fas fa-video"></i></button>
+          <button onclick="event.stopPropagation();abrirLlamada('${c.nombre}', '${c.avatar}')"><i class="fas fa-phone"></i></button>
+          <button onclick="event.stopPropagation();ampliarChat(${idx})"><i class="fab fa-whatsapp"></i></button>
+        </div>
+      </div>
+    `;
+  });
+}
+window.onload = renderContactos;
+
+let streamLocal = null;
+function abrirVideollamada(nombre, img) {
+  cerrarChatAmpliado();
+  document.body.insertAdjacentHTML('beforeend', `
+    <div class="chat-ampliado" id="modalVideollamada">
+      <div class="chat-header">
+        <img src="${img}" alt="${nombre}">
+        <div class="chat-nombre">Videollamada con ${nombre}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:calc(100vh - 160px);">
+        <video id="videoLocal" autoplay playsinline style="width:320px;height:240px;border-radius:12px;background:#000;margin-bottom:10px;"></video>
+        <button class="btn-cerrar-chat" onclick="cerrarVideollamada()">Finalizar</button>
+        <div id="videollamadaError" style="color:red;margin-top:10px;"></div>
+      </div>
+    </div>
+  `);
+  const video = document.getElementById('videoLocal');
+  navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+    .then(function(stream) {
+      streamLocal = stream;
+      video.srcObject = stream;
+    })
+    .catch(function(err) {
+      document.getElementById('videollamadaError').textContent = "No se pudo acceder a la cámara: " + err.name;
+    });
+}
+function cerrarVideollamada() {
+  if (streamLocal) {
+    streamLocal.getTracks().forEach(track => track.stop());
+    streamLocal = null;
+  }
+  const modal = document.getElementById('modalVideollamada');
+  if (modal) modal.remove();
+}
+function abrirLlamada(nombre, img) {
+  cerrarChatAmpliado();
+  document.body.insertAdjacentHTML('beforeend', `
+    <div class="chat-ampliado" id="modalLlamada">
+      <div class="chat-header">
+        <img src="${img}" alt="${nombre}">
+        <div class="chat-nombre">Llamando a ${nombre}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:calc(100vh - 160px);">
+        <div style="font-size:40px;color:#25D366;margin-bottom:10px;"><i class="fas fa-phone"></i></div>
+        <div class="llamada-status" style="font-size:18px;margin-bottom:15px;">Llamando a <b>${nombre}</b>...</div>
+        <button class="btn-cerrar-chat" onclick="cerrarLlamada()">Colgar</button>
+      </div>
+    </div>
+  `);
+  setTimeout(() => {
+    const status = document.querySelector('#modalLlamada .llamada-status');
+    if (status) status.innerHTML = `<b>${nombre}</b> está en línea. <br>¡Hablando!`;
+  }, 2000);
+}
+function cerrarLlamada() {
+  const modal = document.getElementById('modalLlamada');
+  if (modal) modal.remove();
+}
+const respuestas = [
+  "¡Hola! ¿Cómo estás?",
+  "¡Qué bueno saber de ti!",
+  "Estoy haciendo la tarea.",
+  "¿Quieres jugar después?",
+  "¡Te extraño mucho!",
+  "¿Cómo estuvo tu día?",
+  "¡Me alegra tu mensaje!",
+  "¿Necesitas ayuda con algo?"
+];
+let chatIndex = 0;
+function ampliarChat(idx) {
+  cerrarChatAmpliado();
+  const contacto = contactos[idx];
+  document.getElementById('chatAmpliado').style.display = 'flex';
+  document.getElementById('chatAmpliado').innerHTML = `
+    <div class="chat-header">
+      <img src="${contacto.avatar}" alt="${contacto.nombre}">
+      <div class="chat-nombre">${contacto.nombre}</div>
+    </div>
+    <div class="chat-mensajes" id="chatMensajes"></div>
+    <div class="chat-input-row">
+      <input type="text" id="chatInput" placeholder="Escribe tu mensaje...">
+      <button onclick="enviarMensaje()">Enviar</button>
+    </div>
+    <button class="btn-cerrar-chat" onclick="cerrarChatAmpliado()">Cerrar</button>
+  `;
+  chatIndex = 0;
+  document.getElementById('chatMensajes').innerHTML = '';
+}
+function enviarMensaje() {
+  const input = document.getElementById('chatInput');
+  const mensajes = document.getElementById('chatMensajes');
+  if (input.value.trim() === '') return;
+  mensajes.innerHTML += `
+    <div style="text-align:right;margin-bottom:6px;">
+      <span style="background:#25D366;color:#fff;padding:6px 12px;border-radius:12px;display:inline-block;">
+        ${input.value}
+      </span>
+    </div>
+  `;
+  input.value = '';
+  setTimeout(() => {
+    if (chatIndex < respuestas.length) {
+      mensajes.innerHTML += `
+        <div style="text-align:left;margin-bottom:6px;">
+          <span style="background:#eee;color:#333;padding:6px 12px;border-radius:12px;display:inline-block;">
+            ${respuestas[chatIndex]}
+          </span>
+        </div>
+      `;
+      chatIndex++;
+    }
+  }, 700);
+}
+function cerrarChatAmpliado() {
+  document.getElementById('chatAmpliado').style.display = 'none';
+  document.getElementById('chatAmpliado').innerHTML = '';
+  const modalLlamada = document.getElementById('modalLlamada');
+  if (modalLlamada) modalLlamada.remove();
+  const modalVideollamada = document.getElementById('modalVideollamada');
+  if (modalVideollamada) modalVideollamada.remove();
+}
+</script>
